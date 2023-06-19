@@ -15,7 +15,10 @@ Neste projeto, utilizamos o problema do Fecho Convexo (Convex Hull) e implementa
 Basicamente Esse código cria uma interface gráfica onde o usuário pode inserir a quantidade de pontos desejada, e em seguida, o algoritmo QuickHull é usado para calcular e exibir o convex hull correspondente.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+
+![](screenshot/sc1.png)
+![](screenshot/sc2.png)
+![](screenshot/sc3.png)
 
 ## Instalação 
 **Linguagem**: Python<br>
@@ -24,7 +27,41 @@ Adicione 3 ou mais screenshots do projeto em funcionamento.
 python main.py
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+
+Antes de executar o programa, certifique-se de ter o Python 3 instalado em seu sistema. Você pode fazer o download da versão mais recente do Python em python.org.
+
+### Instalação de Requisitos
+
+O programa requer algumas dependências que devem ser instaladas, desta forma siga as etapas abaixo:
+
+1. Abra o terminal e navegue até o diretório do projeto.
+
+2. Execute o seguinte comando para instalar as dependências:
+
+```shell
+pip install -r requirements.txt
+# Isso garantirá que todas as bibliotecas necessárias sejam instaladas corretamente.
+```
+
+## Executando o Programa
+
+Após ter instalado os requisitos, você pode executar o programa seguindo estas etapas:
+
+1. Execute o seguinte comando para iniciar o programa:
+
+```shell
+python3 main.py
+```
+
+2. Quando a tela tiver começado ao canto superior esquerdo terá um quadrado o qual é um campo de input.
+
+3. Insira a quantidade de pontos desejados e pressione a tecla ENTER
+
+4. Espere o calculo ser finalizado e será apresentado o resultado do casco convexo na tela do pygame.
+
+5. O passo a passo anterior pode ser repetido quantas vezes você quiser
+
+*Observação:* Não recomendo inserir um número maior que 10mil, pois pode demorar muito e gerar problemas ao seu computador.
 
 ## Outros 
 Para iniciar a geração de pontos, clique na caixa localizada no canto superior esquerdo e digite a quantidade de pontos desejada.
