@@ -16,74 +16,61 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-vectorPoint = []
-resultPoints = []
-centerPoint = None
-allBaseLines = []
+
+def find_side(p1, p2, p):
+    check = ((p1[0] - p[0]) * (p2[1] - p[1])) - \
+        ((p2[0] - p[0]) * (p1[1] - p[1]))
+
+    if check > 0:
+        return 1  # Left side
+    elif check < 0:
+        return -1  # Right side
+    else:
+        return 0  # Collinear
 
 
-def get_distance(cpt, bl):
-    Vy = bl[1][0] - bl[0][0]
-    Vx = bl[0][1] - bl[1][1]
-    return (Vx * (cpt[0] - bl[0][0]) + Vy * (cpt[1] - bl[0][1]))
+def solve_convex_hull(a, p1, p2, side, resultPoints):
+    index = -1
+    maxDistance = 0
+
+    for i in range(len(a)):
+        temp = abs(
+            ((p2[1] - p1[1]) * a[i][0])
+            - ((p2[0] - p1[0]) * a[i][1])
+            + (p2[0] * p1[1])
+            - (p2[1] * p1[0])
+        ) / math.sqrt(pow((p2[1] - p1[1]), 2) + pow((p2[0] - p1[0]), 2))
+
+        if find_side(p1, p2, a[i]) == side and temp > maxDistance:
+            index = i
+            maxDistance = temp
+
+    if index == -1:
+        point1 = (p1[0], p1[1])
+        point2 = (p2[0], p2[1])
+
+        if point1 not in resultPoints:
+            resultPoints.append(point1)
+
+        if point2 not in resultPoints:
+            resultPoints.append(point2)
+    else:
+        solve_convex_hull(a, p1, a[index], find_side(
+            a[index], p1, p2), resultPoints)
+        solve_convex_hull(a, p2, a[index], find_side(
+            a[index], p2, p1), resultPoints)
 
 
-def find_most_distant_point_base_line(baseLine, points):
-    maxD = 0
-    maxPt = []
-    newPoints = []
-    for pt in points:
-        d = get_distance(pt, baseLine)
-        if d > 0:
-            newPoints.append(pt)
-        else:
-            continue
-        if d > maxD:
-            maxD = d
-            maxPt = pt
-    return {'maxPoint': maxPt, 'newPoints': newPoints}
-
-
-def buildConvexHull(baseLine, points):
-    allBaseLines.append(baseLine)
-    convexHullBaseLines = []
-    t = find_most_distant_point_base_line(baseLine, points)
-    if len(t['maxPoint']) > 0:  # if there is still a point "outside" the base line
-        convexHullBaseLines.extend(
-            buildConvexHull([baseLine[0], t['maxPoint']], t['newPoints'])
-        )
-        convexHullBaseLines.extend(
-            buildConvexHull([t['maxPoint'], baseLine[1]], t['newPoints'])
-        )
-        return convexHullBaseLines
-    else:  # if there is no more point "outside" the base line, the current base line is part of the convex hull
-        return [baseLine]
-
-
-def getConvexHull(points):
-    # find first baseline
-    maxX, minX = float('-inf'), float('inf')
-    maxPt, minPt = None, None
-    for pt in points:
-        if pt[0] > maxX or maxX is None:
-            maxPt = pt
-            maxX = pt[0]
-        if pt[0] < minX or minX is None:
-            minPt = pt
-            minX = pt[0]
-    ch = buildConvexHull([minPt, maxPt], points) + \
-        buildConvexHull([maxPt, minPt], points)
-    return ch
-
+def compare_points(point, center_point):
+    x, y = point[0] - center_point[0], point[1] - center_point[1]
+    angle = math.atan2(y, x)
+    return angle
 
 def draw_lines(resultPoints):
-    scaled_points = []
-    if len(resultPoints) > 2:
-        for line in resultPoints:
-            scaled_points.append(
-                (screen_width // 2 + line[0][0], screen_height // 2 - line[0][1]))
-            scaled_points.append(
-                (screen_width // 2 + line[1][0], screen_height // 2 - line[1][1]))
+    if len(resultPoints) > 0:
+        scaled_points = [(screen_width // 2 + point[0],
+                          screen_height // 2 - point[1]) for point in resultPoints]
+        scaled_points.append(scaled_points[0])
         for i in range(len(scaled_points) - 1):
             pygame.draw.line(
                 screen, BLUE, scaled_points[i], scaled_points[i + 1], 3)
@@ -99,10 +86,9 @@ def draw_input_box(user_text):
     input_rect.w = max(100, text_surface.get_width() + 10)
 
 
-def draw_message(message, type=None):
+def draw_message(message, type= None):
     font = pygame.font.Font(None, 18)
-    text_surface = font.render(
-        message, True, ('red')) if type == 'error' else font.render(message, True, ('black'))
+    text_surface = font.render(message, True, ('red')) if type == 'error' else font.render(message, True, ('black'))
     text_rect = text_surface.get_rect(
         center=(screen_width // 2, screen_height-20))
     background_rect = pygame.Rect(
@@ -130,7 +116,9 @@ def draw_points(vectorPoint):
 
 
 def main():
-    global vectorPoint, resultPoints, centerPoint, allBaseLines
+    vectorPoint = []
+    resultPoints = []
+    centerPoint = None
     user_text = ''
 
     running = True
@@ -145,14 +133,10 @@ def main():
                 if event.key == pygame.K_BACKSPACE:
                     user_text = user_text[:-1]
                 elif event.key == pygame.K_RETURN:
-                    draw_error = False
-                    if not user_text.isdigit():
-                        draw_error = True
-                        message = 'insira apenas numeros'
-                    else:    
-                        numPoints = int(user_text)
-                        can_do_hull = True
+                    numPoints = int(user_text)
                     user_text = ''
+                    can_do_hull = True
+                    draw_error = False
                 else:
                     user_text += event.unicode
 
@@ -168,19 +152,16 @@ def main():
 
         if can_do_hull:
             resultPoints = []
-            allBaseLines = []
             vectorPoint = []
             i = 0
-            if numPoints <= 0:
-                draw_error = True
-                message = 'Insira numeros superiores a 2'
             if numPoints == 1:
                 draw_error = True
                 message = 'Nao eh possivel criar um casco convexo com apenas 1 ponto'
+
             elif numPoints == 2:
                 draw_error = True
                 message = 'Nao eh possivel criar um casco convexo com apenas 2 pontos'
-            else:
+            else:    
                 while i < numPoints:
                     found = False
                     while not found:
@@ -193,7 +174,22 @@ def main():
                             vectorPoint.append(tempPoint)
                             print(f"Random result = ({xTemp}, {yTemp})")
                             i += 1
-                resultPoints = getConvexHull(vectorPoint)
+
+                centerPointX = sum(point[0]
+                                for point in vectorPoint) // len(vectorPoint)
+                centerPointY = sum(point[1]
+                                for point in vectorPoint) // len(vectorPoint)
+                centerPoint = (centerPointX, centerPointY)
+                indexXMin = min(range(numPoints),
+                                key=lambda i: vectorPoint[i][0])
+                indexXMax = max(range(numPoints),
+                                key=lambda i: vectorPoint[i][0])
+                solve_convex_hull(
+                    vectorPoint, vectorPoint[indexXMin], vectorPoint[indexXMax], 1, resultPoints)
+                solve_convex_hull(
+                    vectorPoint, vectorPoint[indexXMin], vectorPoint[indexXMax], -1, resultPoints)
+                resultPoints.sort(
+                    key=lambda point: compare_points(point, centerPoint))
                 print("Convex hull result:")
                 for point in resultPoints:
                     print(point)
