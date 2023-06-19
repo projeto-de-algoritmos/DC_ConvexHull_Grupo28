@@ -44,23 +44,23 @@ def find_most_distant_point_base_line(baseLine, points):
     return {'maxPoint': maxPt, 'newPoints': newPoints}
 
 
-def buildConvexHull(baseLine, points):
+def build_convex_hull(baseLine, points):
     allBaseLines.append(baseLine)
     convexHullBaseLines = []
     t = find_most_distant_point_base_line(baseLine, points)
     if len(t['maxPoint']) > 0:  # if there is still a point "outside" the base line
         convexHullBaseLines.extend(
-            buildConvexHull([baseLine[0], t['maxPoint']], t['newPoints'])
+            build_convex_hull([baseLine[0], t['maxPoint']], t['newPoints'])
         )
         convexHullBaseLines.extend(
-            buildConvexHull([t['maxPoint'], baseLine[1]], t['newPoints'])
+            build_convex_hull([t['maxPoint'], baseLine[1]], t['newPoints'])
         )
         return convexHullBaseLines
     else:  # if there is no more point "outside" the base line, the current base line is part of the convex hull
         return [baseLine]
 
 
-def getConvexHull(points):
+def get_convex_hull(points):
     # find first baseline
     maxX, minX = float('-inf'), float('inf')
     maxPt, minPt = None, None
@@ -71,8 +71,8 @@ def getConvexHull(points):
         if pt[0] < minX or minX is None:
             minPt = pt
             minX = pt[0]
-    ch = buildConvexHull([minPt, maxPt], points) + \
-        buildConvexHull([maxPt, minPt], points)
+    ch = build_convex_hull([minPt, maxPt], points) + \
+        build_convex_hull([maxPt, minPt], points)
     return ch
 
 
@@ -193,7 +193,7 @@ def main():
                             vectorPoint.append(tempPoint)
                             print(f"Random result = ({xTemp}, {yTemp})")
                             i += 1
-                resultPoints = getConvexHull(vectorPoint)
+                resultPoints = get_convex_hull(vectorPoint)
                 print("Convex hull result:")
                 for point in resultPoints:
                     print(point)
