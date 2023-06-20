@@ -14,6 +14,8 @@ Neste projeto, utilizamos o problema do Fecho Convexo (Convex Hull) e implementa
 
 Basicamente Esse código cria uma interface gráfica onde o usuário pode inserir a quantidade de pontos desejada, e em seguida, o algoritmo QuickHull é usado para calcular e exibir o convex hull correspondente.
 
+[link](https://youtu.be/latiFwJ8soU) para vídeo de execução
+
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
