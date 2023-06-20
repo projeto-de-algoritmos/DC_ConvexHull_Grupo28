@@ -1,4 +1,4 @@
-#D&C_DC_ConvexHull
+# D&C_DC_ConvexHull
 
 **Número da Lista**: 28<br>
 **Conteúdo da Disciplina**: Dividir e Conquistar<br>
