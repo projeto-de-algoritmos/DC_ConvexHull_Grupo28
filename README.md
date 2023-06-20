@@ -1,45 +1,31 @@
-**!! Atenção: Renomeie o seu repositório para (Tema)_(NomeDoProjeto). !!** 
+#D&C_DC_ConvexHull
 
-Temas:
- - Grafos1
- - Grafos2
- - PD
- - D&C
- - Greed
- - Final 
- 
- **!! *Não coloque os nomes dos alunos no título do repositório*. Exemplo de título correto: Grafos2_Labirinto-do-Minotauro !!**
- 
- (Apague essa seção)
-
-# NomedoProjeto
-
-**Número da Lista**: X<br>
-**Conteúdo da Disciplina**: XXXXXXXXXX<br>
+**Número da Lista**: 28<br>
+**Conteúdo da Disciplina**: Dividir e Conquistar<br>
 
 ## Alunos
 |Matrícula | Aluno |
 | -- | -- |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
-| xx/xxxxxx  |  xxxx xxxx xxxxx |
+| 19/0042419  |  Davi Matheus da Rocha de Oliveira |
+| 19/0058650  |  Natanael Fernandes Coelho Filho |
 
 ## Sobre 
-Descreva os objetivos do seu projeto e como ele funciona. 
+Neste projeto, utilizamos o problema do Fecho Convexo (Convex Hull) e implementamos utilizando a biblioteca Pygame para facilitar a geração de pontos aleatórios. Utilizamos o algoritmo QuickHull, um algoritmo de Divisão e Conquista similar ao QuickSort. O objetivo do programa é encontrar o menor polígono convexo que contém todos os pontos dados, ou seja, a fronteira mínima do polígono convexo que abrange todos os pontos.
 
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
 ## Instalação 
-**Linguagem**: xxxxxx<br>
-**Framework**: (caso exista)<br>
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
+**Linguagem**: Python<br>
+**Framework**: Nenhum<br>
+
+python main.py
 
 ## Uso 
 Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
-
-
+Para iniciar a geração de pontos, clique na caixa localizada no canto superior esquerdo e digite a quantidade de pontos desejada.
+O recomandado é que coloque no "Maximo" 10000 ja que acima disso vai demorar muito para fazer o calculo, demandando muito do processo.
 
 
